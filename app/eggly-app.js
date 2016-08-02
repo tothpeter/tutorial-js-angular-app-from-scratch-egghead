@@ -23,9 +23,45 @@ angular.module('Eggly', [])
 
     $scope.setCurrentCategory = function(category) {
       $scope.currentCategory = category;
+
+      $scope.cancelCreating();
+      $scope.cancelEditing();
     };
 
     $scope.isCurrentCategory = function(category) {
       return $scope.currentCategory != null && $scope.currentCategory.id == category.id;
+    }
+
+    // ----------------------
+    // Creating and editing states
+    // ----------------------
+
+    $scope.isCreating = false;
+    $scope.isEditing = false;
+
+    $scope.startCreating = function() {
+      $scope.isCreating = true;
+      $scope.isEditing = false;
+      // resetCreateForm();
+    }
+
+    $scope.cancelCreating = function() {
+      $scope.isCreating = false;
+    }
+
+    $scope.startEditing = function() {
+      $scope.isCreating = false;
+      $scope.isEditing = true;
+    }
+
+    $scope.cancelEditing = function() {
+      $scope.isEditing = false;
+    }
+
+    $scope.shouldShowCreating = function() {
+      return $scope.currentCategory && !$scope.isEditing;
+    }
+    $scope.shouldShowEditing = function() {
+      return $scope.isEditing && !$scope.isCreating;
     }
   });
