@@ -20,6 +20,7 @@ angular.module('Eggly', [])
     ];
 
     $scope.currentCategory = null;
+    $scope.editedBookmark = null;
 
     $scope.setCurrentCategory = function(category) {
       $scope.currentCategory = category;
@@ -41,7 +42,7 @@ angular.module('Eggly', [])
         title: '',
         url: '',
         category: $scope.currentCategory.name
-      }
+      };
     }
 
     $scope.createBookmark = function(bookmark) {
@@ -49,6 +50,20 @@ angular.module('Eggly', [])
       $scope.bookmarks.push(bookmark);
 
       resetCreateForm();
+    };
+
+    $scope.updateBookmark = function(bookmark) {
+      var index = _.findIndex($scope.bookmarks, function(b) {
+        return b.id === bookmark.id;
+      });
+
+      $scope.bookmarks[index] = bookmark;
+      $scope.editedBookmark = null;
+      $scope.isEditing = false;
+    }
+
+    $scope.isSelectedBookmark = function(bookmark) {
+      return $scope.editedBookmark !== null && $scope.editedBookmark.id === bookmark.id;
     };
 
     // ----------------------
@@ -69,13 +84,15 @@ angular.module('Eggly', [])
       $scope.isCreating = false;
     }
 
-    $scope.startEditing = function() {
+    $scope.startEditing = function(bookmark) {
       $scope.isCreating = false;
       $scope.isEditing = true;
+      $scope.editedBookmark = angular.copy(bookmark);
     }
 
     $scope.cancelEditing = function() {
       $scope.isEditing = false;
+      $scope.editedBookmark = null;
     }
 
     $scope.shouldShowCreating = function() {
